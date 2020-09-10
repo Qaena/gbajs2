@@ -80,12 +80,13 @@ window.onresize = function() {
 	resizeDisplay();
 }
 
-//might be able to use calc() and vh/vw to do this in css, but this was easier for the short term
+//not sure why I rounded some numbers...it felt cleaner, but I suppose decimals are supported
+//and would result in a more precise outcome.
 function resizeDisplay() {
 	const fullHeight = 550;
 	const fullWidth = 650;
 	const fullMargin = 85;
-	const buttonBarHeight = 40;
+	const buttonBarHeight = 45;
 	let w, h, sz, m;
 
 	//determine which measure will be full(width or height)
@@ -94,17 +95,20 @@ function resizeDisplay() {
 
 	if (winW / winH > fullWidth / (fullHeight + buttonBarHeight)) {
 		//height is the full measure
-		h = winH - buttonBarHeight;
+		h = Math.min(winH - buttonBarHeight, fullHeight);
 		sz = h / fullHeight;
-		w = Math.round(sz * fullWidth);
+		w = sz * fullWidth;
 	} else {
 		//width is the full measure
-		w = winW;
+		w = Math.min(winW, fullWidth);
 		sz = w / fullWidth;
-		h = Math.round(sz * fullHeight);
+		h = sz * fullHeight;
 	}
 
-	m = Math.round(fullMargin / fullWidth * w * (1 / sz));
+	m = fullMargin;
+	//margin if used with "zoom" in the css will always be the original of 85px
+	//this calculation should result in the margin necessary if transform is used
+	//m = Math.round(fullMargin / fullWidth * w);
 
 	document.documentElement.style.setProperty('--display-height', h + "px");
 	document.documentElement.style.setProperty('--display-width', w + "px");
@@ -147,16 +151,16 @@ function run(file) {
 	var load = document.getElementById('select');
 	load.textContent = 'Loading...';
 	load.removeAttribute('onclick');
-	var pause = document.getElementById('pause');
-	pause.textContent = "PAUSE";
+	// var pause = document.getElementById('pause');
+	// pause.textContent = "PAUSE";
 	gba.loadRomFromFile(file, function(result) {
 		if (result) {
 			for (var i = 0; i < runCommands.length; ++i) {
 				runCommands[i]();
 			}
 			runCommands = [];
-			fadeOut('preload', 'ingame');
-			fadeOut('instructions', null, true);
+			// fadeOut('preload', 'ingame');
+			// fadeOut('instructions', null, true);
 			gba.runStable();
 		} else {
 			load.textContent = 'FAILED';
@@ -305,9 +309,15 @@ const fullScreen = () => {
 </script>
 </head>
 <body>
-	<div id="display">
+	<section id="display">
 		<canvas id="screen" width="480" height="320"></canvas>
-	</div>
+	</section>
+	<section id="buttonBar">
+		<button id="select" onclick="document.getElementById('loader').click()"> Load ROM</button>
+		<input id="loader" type="file" accept=".gba" onchange="run(this.files[0]);">
+		<button>Options</button>
+		<button>Controls</button>
+	</section>
 <!-- <section id="gameinfo">
 	<table id="mapping">
 			<tr>

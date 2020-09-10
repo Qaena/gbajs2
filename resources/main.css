@@ -15,7 +15,8 @@ body {
 	height: 100%;
 	width: 100%;
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 }
 
 #display {
@@ -32,8 +33,17 @@ body {
 	image-rendering: -webkit-optimize-contrast;
 	image-rendering: -moz-crisp-edges;
 	image-rendering: -o-crisp-edges;
+
+
 	zoom: var(--screen-zoom);
-	-o-transform: scale(var(--screen-zoom));
+
+	/* both of these if used instead of "zoom" above will not render the correct margin.
+	This is becuase zoom affects the margin, so it is always 85 whereas transform does not,
+	so it would need to be adjusted to be the calculated amount.
+	Looks like Opera Mini is the only browser that does not support 2d transforms(https://caniuse.com/?search=transform)
+	so it would be worthwhile to switch over to this and abandon zoom if possible.*/
+	/* transform: scale(var(--screen-zoom));
+	-o-transform: scale(var(--screen-zoom)); */
 }
 
 .space {
@@ -42,6 +52,43 @@ body {
 
 button {
 	font-family: 'Calibri', 'Verdana', sans-serif;
+}
+
+#buttonBar {
+	height: 40px;
+}
+
+#buttonBar button {
+	background: transparent;
+	/*this shading angle isn't quite right if you compare to the display image.
+	should be top left to bottom right instead of top to bottom*/
+	border: 0px solid rgba(192, 128, 192, 0.5);
+	border-top: 2px solid rgba(255, 200, 255, 0.5);
+	border-bottom: 2px solid rgba(96, 48, 96, 0.8);
+	border-radius: 30px;
+	color: white;
+	font-weight: bold;
+	display: inline-block;
+	padding: 5px 15px;
+	font-size: 20px;
+	text-shadow: 0 2px rgba(96, 48, 96, 0.8), 0 -1px rgba(255, 200, 255, 0.5);
+	cursor: pointer;
+	outline: none;
+}
+
+#buttonBar button:not(:last-child) {
+	margin-right: 10px;
+}
+
+#buttonBar button:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+#buttonBar button:active {
+	background: transparent;
+	border: 0px solid rgba(192, 128, 192, 0.5);
+	border-top: 2px solid rgba(96, 48, 96, 0.8);
+	border-bottom: 2px solid rgba(255, 200, 255, 0.5);
 }
 
 #controls * {
