@@ -49,6 +49,8 @@ try {
 }
 
 window.onload = function() {
+	resizeDisplay();
+
 	if (gba && FileReader) {
 		var canvas = document.getElementById('screen');
 		gba.setCanvas(canvas);
@@ -72,6 +74,42 @@ window.onload = function() {
 		var dead = document.getElementById('controls');
 		dead.parentElement.removeChild(dead);
 	}
+}
+
+window.onresize = function() {
+	resizeDisplay();
+}
+
+//might be able to use calc() and vh/vw to do this in css, but this was easier for the short term
+function resizeDisplay() {
+	const fullHeight = 550;
+	const fullWidth = 650;
+	const fullMargin = 85;
+	const buttonBarHeight = 40;
+	let w, h, sz, m;
+
+	//determine which measure will be full(width or height)
+	let winW = document.body.offsetWidth;
+	let winH = document.body.offsetHeight;
+
+	if (winW / winH > fullWidth / (fullHeight + buttonBarHeight)) {
+		//height is the full measure
+		h = winH - buttonBarHeight;
+		sz = h / fullHeight;
+		w = Math.round(sz * fullWidth);
+	} else {
+		//width is the full measure
+		w = winW;
+		sz = w / fullWidth;
+		h = Math.round(sz * fullHeight);
+	}
+
+	m = Math.round(fullMargin / fullWidth * w * (1 / sz));
+
+	document.documentElement.style.setProperty('--display-height', h + "px");
+	document.documentElement.style.setProperty('--display-width', w + "px");
+	document.documentElement.style.setProperty('--screen-zoom', sz);
+	document.documentElement.style.setProperty('--screen-margin', m + "px");
 }
 
 function fadeOut(id, nextId, kill) {
@@ -267,51 +305,56 @@ const fullScreen = () => {
 </script>
 </head>
 <body>
-<canvas id="screen" width="480" height="320"></canvas>
-<section id="gameinfo">
-	<p>The Game Boy Advance's buttons are mapped as follows:</p>
+	<div id="display">
+		<canvas id="screen" width="480" height="320"></canvas>
+	</div>
+<!-- <section id="gameinfo">
 	<table id="mapping">
-		<tr>
-			<td>Up</td>
-			<td>Up</td>
-		</tr>
-		<tr>
-			<td>Down</td>
-			<td>Down</td>
-		</tr>
-		<tr>
-			<td>Left</td>
-			<td>Left</td>
-		</tr>
-		<tr>
-			<td>Right</td>
-			<td>Right</td>
-		</tr>
-		<tr>
-			<td>A</td>
-			<td>Z</td>
-		</tr>
-		<tr>
-			<td>B</td>
-			<td>X</td>
-		</tr>
-		<tr>
-			<td>L</td>
-			<td>A</td>
-		</tr>
-		<tr>
-			<td>R</td>
-			<td>S</td>
-		</tr>
-		<tr>
-			<td>Start</td>
-			<td>Enter</td>
-		</tr>
-		<tr>
-			<td>Select</td>
-			<td>\</td>
-		</tr>
-	</table>
+			<tr>
+				<th>GBA</th>
+				<th>Keyboard</th>
+			</tr>
+			<tr>
+				<td>Up</td>
+				<td>Up</td>
+			</tr>
+			<tr>
+				<td>Down</td>
+				<td>Down</td>
+			</tr>
+			<tr>
+				<td>Left</td>
+				<td>Left</td>
+			</tr>
+			<tr>
+				<td>Right</td>
+				<td>Right</td>
+			</tr>
+			<tr>
+				<td>A</td>
+				<td>Z</td>
+			</tr>
+			<tr>
+				<td>B</td>
+				<td>X</td>
+			</tr>
+			<tr>
+				<td>L</td>
+				<td>A</td>
+			</tr>
+			<tr>
+				<td>R</td>
+				<td>S</td>
+			</tr>
+			<tr>
+				<td>Start</td>
+				<td>Enter</td>
+			</tr>
+			<tr>
+				<td>Select</td>
+				<td>\</td>
+			</tr>
+		</table>
 </section>
 <section id="controls">
 	<div id="preload">
@@ -350,6 +393,6 @@ const fullScreen = () => {
 		feeling daring, please submit problem reports to the GitHub page.
 	</p>
 </section>
-<footer style="float: left;">© 2012 – 2013 <a href="http://endrift.com/">Endrift</a></footer>
+<footer style="float: left;">© 2012 – 2013 <a href="http://endrift.com/">Endrift</a></footer> -->
 </body>
 </html>

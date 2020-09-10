@@ -1,12 +1,43 @@
+:root {
+	--display-height: 550px;
+	--display-width: 650px;
+	--screen-zoom: 1;
+	--screen-margin: 85px;
+}
+
 body {
-	background: url('bg.png') no-repeat top center, #765490;
-	text-align: center;
+	background-color: #765490;
 	margin: 0;
 	color: white;
 	font-family: 'Calibri', 'Verdana', sans-serif;
 	overflow: hidden;
 	font-size: 15px;
 	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+#display {
+	background: url('bg.png') no-repeat;
+	background-size: contain;
+	height: var(--display-height);
+	width: var(--display-width);
+}
+
+#screen {
+	margin-top: var(--screen-margin);
+	margin-left: var(--screen-margin);
+
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	zoom: var(--screen-zoom);
+	-o-transform: scale(var(--screen-zoom));
+}
+
+.space {
+	flex-grow: 1;
 }
 
 button {
@@ -15,21 +46,6 @@ button {
 
 #controls * {
 	-webkit-font-smoothing: antialiased; /* I'm so sorry */
-}
-
-#screen {
-	margin-top: 85px;
-	margin-bottom: -405px; /* Take up no height */
-}
-
-#screen[width="240"] {
-	margin-top: 42.5px;
-	margin-bottom: -363px; /* Take up no height */
-	image-rendering: -webkit-optimize-contrast;
-	image-rendering: -moz-crisp-edges;
-	image-rendering: -o-crisp-edges;
-	zoom: 2;
-	-o-transform: scale(2);
 }
 
 #crash {
@@ -79,6 +95,13 @@ a:link, a:visited {
 #controls .bigbutton, #mapping td {
 	font-size: 30px;
 	padding: 8px 25px;
+}
+
+#mapping td {
+	font-size: calc(100vh / 25);
+	margin-top: calc(100vh / 40);
+	padding-top: calc(100vh / 100);
+	padding-bottom: calc(100vh / 100);
 }
 
 #moreinfo {
@@ -275,7 +298,6 @@ ul#links li:not(:first-child)::before {
 }
 
 #mapping td {
-	padding: 5px 23px;
 	display: table-cell;
 }
 
